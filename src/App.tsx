@@ -9,6 +9,7 @@ import SettingPage from "./pages/SettingPage";
 import TrafficGrowCenterPage from "./pages/TrafficGrowCenterPage";
 import PostSchedulePage from "./pages/PostSchedulePage";
 import MainLayout from "./components/Layout/MainLayout";
+import MediaManagementPage from "./pages/MediaManagementPage";
 
 const mainRoutes = [
   {
@@ -32,9 +33,14 @@ const mainRoutes = [
     key: "setting",
   },
   {
-    path: "/post-schedule",
+    path: "/social-media/social-post-scheduler",
     element: <PostSchedulePage />,
     key: "post-schedule",
+  },
+  {
+    path: "/social-media/social-media-manager",
+    element: <MediaManagementPage />,
+    key: "media-management",
   },
 ];
 
@@ -46,8 +52,12 @@ function App() {
       <>
         <Routes>
           <Route key={"not-found"} path={"*"} element={<NotFoundPage />} />
-          {mainRoutes.map((item) => (
-            <Route key={item.key} path={item.path} element={item.element} />
+          {mainRoutes.map(() => (
+            <Route element={<MainLayout />}>
+              {mainRoutes.map((item) => (
+                <Route key={item.key} path={item.path} element={item.element} />
+              ))}
+            </Route>
           ))}
         </Routes>
         {loading && (

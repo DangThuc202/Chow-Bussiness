@@ -24,7 +24,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               style: {
                 background: "#363636",
                 color: "#fff",
-                fontFamily: "Inter",
               },
               success: {
                 duration: 3000,

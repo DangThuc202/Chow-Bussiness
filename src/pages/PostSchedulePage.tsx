@@ -1,9 +1,12 @@
-import React from 'react'
+import PostSchedule from "@/components/PostSchedule";
+import React from "react";
 
 const PostSchedulePage = () => {
   return (
-    <div>PostSchedulePage</div>
-  )
-}
+    <div>
+      <PostSchedule />
+    </div>
+  );
+};
 
-export default PostSchedulePage
+export default PostSchedulePage;

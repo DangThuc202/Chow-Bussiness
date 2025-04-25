@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import NotFoundPage from "./NotFoundPage";
 
 const TrafficGrowCenterPage = () => {
   return (
-    <div>TrafficGrowCenterPage</div>
-  )
-}
+    <div>
+      <NotFoundPage />
+    </div>
+  );
+};
 
-export default TrafficGrowCenterPage
+export default TrafficGrowCenterPage;

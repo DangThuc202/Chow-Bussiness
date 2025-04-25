@@ -1,9 +1,10 @@
-import React from 'react'
-
+import AIContent from "@/components/AIContent";
 const AIContentPage = () => {
   return (
-    <div>AIContentPage</div>
-  )
-}
+    <div>
+      <AIContent />
+    </div>
+  );
+};
 
-export default AIContentPage
+export default AIContentPage;

@@ -13,6 +13,7 @@ export const LanguageContext = createContext<LanguageContextProps | undefined>(
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const { i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState<string>("vi");
+  console.log(selectedLanguage);
 
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);

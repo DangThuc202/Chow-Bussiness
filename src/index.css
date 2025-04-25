@@ -1,1 +1,119 @@
 @import "tailwindcss";
+
+
+.bg-custom-sidebar {
+  background-image: linear-gradient(to bottom left, #FDCE1C 2%, #FE881C 10%, #FE881C 80%, #FDCE1C 100%);
+}
+
+.custom-menu .ant-menu-item,
+.custom-menu .ant-menu-submenu-title {
+  @apply text-white font-medium
+}
+
+.ant-menu-submenu-selected>.ant-menu-submenu-title {
+  color: white !important;
+  font-weight: 500;
+}
+
+.custom-menu .ant-menu-item:hover,
+.custom-menu .ant-menu-submenu-title:hover {
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.custom-menu .ant-menu-item-selected {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.sidebar {
+  background-color: #FE881C;
+}
+
+.ai-content-green {
+  color: #03695E;
+
+  &:hover {
+    background-color: rgba(3, 105, 94, 0.1);
+    cursor: pointer;
+  }
+}
+
+.ai-content-orange {
+  color: #FE881C;
+
+  &:hover {
+    background-color: rgba(254, 136, 28, 0.1);
+    cursor: pointer;
+  }
+}
+
+.primary {
+  color: #FE881C;
+  font-weight: bold;
+}
+
+.bg-primary {
+  background-color: #FE881C;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(254, 136, 28, 0.7);
+
+  }
+}
+
+.primary2 {
+  color: rgb(58 166 202 / 0.9);
+}
+
+.custom-select .ant-select-selection-item {
+  font-size: 10px;
+  /* text-xs */
+}
+
+@media (min-width: 1280px) {
+  .custom-select .ant-select-selection-item {
+    font-size: 1rem;
+    /* text-base */
+  }
+}
+
+.hover {
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+}
+
+.ant-tabs-nav-wrap {
+  @apply justify-center gap-5
+}
+
+.ant-picker-calendar-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* để content nằm giữa chiều cao luôn */
+}
+
+/* Nếu muốn cả thứ đầu tuần (Mon, Tue...) cũng nằm giữa */
+.ant-picker-content th {
+  text-align: center !important;
+  padding-right: 0 !important;
+  font-weight: 500 !important;
+}
+
+.ant-picker-calendar-date-value {
+  text-align: center !important;
+}
+
+.custom-schedule-modal .ant-modal {
+  width: 90%;
+}
+
+@media (min-width: 1280px) {
+  .custom-schedule-modal .ant-modal {
+    width: 55%;
+  }
+}
