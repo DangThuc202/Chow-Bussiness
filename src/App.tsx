@@ -10,6 +10,7 @@ import TrafficGrowCenterPage from "./pages/TrafficGrowCenterPage";
 import PostSchedulePage from "./pages/PostSchedulePage";
 import MainLayout from "./components/Layout/MainLayout";
 import MediaManagementPage from "./pages/MediaManagementPage";
+import AICanvasPage from "./pages/AICanvasPage";
 
 const mainRoutes = [
   {
@@ -41,6 +42,11 @@ const mainRoutes = [
     path: "/social-media/social-media-manager",
     element: <MediaManagementPage />,
     key: "media-management",
+  },
+  {
+    path: "/AI-canvas",
+    element: <AICanvasPage />,
+    key: "AI-canvas",
   },
 ];
 

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import {
   LinkOutlined,
   OpenAIOutlined,
+  RobotOutlined,
   SettingOutlined,
   UsergroupAddOutlined,
   VerticalRightOutlined,
@@ -108,6 +109,26 @@ const SideBar = () => {
     },
     {
       key: "item4",
+      icon: (
+        <div className="flex gap-1.5 relative group">
+          <span
+            className={`text-white z-10 ${
+              isCollapsedSidebar && !isMobile
+                ? "hidden"
+                : "opacity-0 group-hover:opacity-100"
+            }`}>
+            <TooltipComponent
+              title={t("AI.canvas")}
+              content={t("AI.canvass.content")}
+            />
+          </span>
+          <RobotOutlined style={{ fontSize: "24px" }} />
+        </div>
+      ),
+      label: <Link to="/AI-canvas">{t("AI Canvas")}</Link>,
+    },
+    {
+      key: "item5",
       icon: (
         <div className="flex gap-1.5 relative group">
           <span
