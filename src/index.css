@@ -118,3 +118,11 @@
     width: 55%;
   }
 }
+
+/* Nếu dùng CSS thường */
+.custom-radio-group .ant-radio-button-wrapper:not(.ant-radio-button-wrapper-checked) {
+  background-color: #FE881C;
+  /* red-400 */
+  color: white;
+  border: 1px solid #f0ac6c;
+}

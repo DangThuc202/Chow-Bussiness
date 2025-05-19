@@ -1,15 +1,15 @@
 import axios from "axios";
-import { access } from "fs";
 
 export const fetchFBPage = async (accessToken: string) => {
-  const response = await axios.get(
-    "https://graph.facebook.com/v21.0/me/accounts",
-    {
-      params: { access_token: accessToken },
-    }
-  );
-
-  return response?.data;
+  if (accessToken) {
+    const response = await axios.get(
+      "https://graph.facebook.com/v21.0/me/accounts",
+      {
+        params: { access_token: accessToken },
+      }
+    );
+    return response?.data;
+  }
 };
 
 export const fetchPagePosts = async (pageToken: string, pageId: string) => {
@@ -54,6 +54,7 @@ export const schedulePostFacebook = async ({
       scheduled_publish_time: scheduledTime,
       access_token: pageToken,
     };
+
     if (Array.isArray(imageUrl) && imageUrl.length > 0) {
       const { data: uploadData } = await axios.post(
         `https://graph.facebook.com/v21.0/${pageId}/photos`,
@@ -67,10 +68,14 @@ export const schedulePostFacebook = async ({
       postData.attached_media = [{ media_fbid: uploadData.id }];
     }
 
+    console.log("abc");
+
     const { data: postResult } = await axios.post(
       `https://graph.facebook.com/v21.0/${pageId}/feed`,
       postData
     );
+
+    console.log(postResult);
 
     return postResult;
   } catch (err: any) {

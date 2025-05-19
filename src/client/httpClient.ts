@@ -5,22 +5,22 @@ const httpClient = axios.create({
 });
 
 const getLocalToken = () => {
-  return localStorage.getItem("accessToken");
+  return localStorage.getItem("idToken");
 };
 
 const refreshToken = async () => {
   const token = localStorage.getItem("refreshToken");
 
-  const response = await httpClient.get("/api/v1/auth/refresh-token", {
+  const response = await httpClient.get("/api/auth/refresh-token", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (response?.data) {
-    const { refreshToken, accessToken } = response.data;
+  if (response?.data?.data) {
+    const { refreshToken, accessToken } = response.data.data;
     localStorage.setItem("refreshToken", refreshToken);
-    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("idToken", accessToken);
   }
 };
 
@@ -45,10 +45,7 @@ httpClient.interceptors.response.use(
 
     switch (status) {
       case 401:
-        if (
-          config.url !== "/api/v1/auth/refresh-token" &&
-          config.url !== "/api/v1/auth/login"
-        ) {
+        if (config.url !== "/api/auth/refresh-token") {
           await refreshToken();
         } else if (config.url === "/api/v1/auth/refresh-token") {
           localStorage.removeItem("refreshToken");

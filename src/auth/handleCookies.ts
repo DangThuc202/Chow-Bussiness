@@ -38,3 +38,20 @@ export const getAccessToken = (): string | null => {
 export const removeAccessToken = (): void => {
   cookies.remove("accessToken", { path: "/" }); // Corrected the cookie name to 'access_token'
 };
+
+export const setGoogleLoginCookies = (userData: IUserCookie): void => {
+  cookies.set("userLoginGoogle", JSON.stringify(userData), {
+    path: "/",
+    maxAge: 3600,
+  });
+};
+
+export const getGoogleLoginCookies = (): IUserCookie | null => {
+  const cookiesResult = cookies.get("userLoginGoogle");
+  if (!cookiesResult) return null;
+  return cookiesResult;
+};
+
+export const deleteGoogleLoginCookies = (): void => {
+  cookies.remove("userLoginGoogle", { path: "/" });
+};

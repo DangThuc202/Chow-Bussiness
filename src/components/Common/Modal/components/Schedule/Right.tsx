@@ -2,6 +2,7 @@ import { Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import FB from "@/assets/PostSchedule/iconFacebook.svg";
 import IN from "@/assets/PostSchedule/iconInstagram.svg";
+import LI from "@/assets/PostSchedule//iconLinkedIn.svg";
 import { useState } from "react";
 import Form from "./Form";
 
@@ -15,6 +16,11 @@ const btn = [
     icon: IN,
     text: "Instagram",
     key: "instagram",
+  },
+  {
+    icon: LI,
+    text: "LinkedIn",
+    key: "linkedin",
   },
 ];
 

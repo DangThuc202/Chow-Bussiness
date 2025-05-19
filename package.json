@@ -19,6 +19,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
+    "firebase": "^11.4.0",
     "framer-motion": "^12.6.3",
     "i18next": "^24.2.3",
     "js-cookie": "^3.0.5",

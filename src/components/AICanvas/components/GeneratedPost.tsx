@@ -9,11 +9,17 @@ import { Checkbox, Pagination, Modal, Input } from "antd";
 import { useTranslation } from "react-i18next";
 import FB from "@/assets/PostSchedule/iconFacebook.svg";
 import toast from "react-hot-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Cookies from "universal-cookie";
+import { getBlogHistory, importKnowledge } from "@/services/BE-Service";
+
+const cookies = new Cookies();
 
 interface GeneratedPostProps {
   generatedContent: string | null;
   onConfirm: () => void;
 }
+
 const GeneratedPost: React.FC<GeneratedPostProps> = ({
   generatedContent,
   onConfirm,
@@ -22,43 +28,69 @@ const GeneratedPost: React.FC<GeneratedPostProps> = ({
   const [isChecked, setIsChecked] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editedContent, setEditedContent] = useState<string>("");
+  const [editedContent, setEditedContent] = useState("");
+  const [selectedPostId, setSelectedPostId] = useState("");
+
   const handleCheckboxChange = (e: any) => {
     setIsChecked(e.target.checked);
   };
+
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const pageContent = generatedContent ? [generatedContent] : [];
-  const [localPageContent, setLocalPageContent] = useState(pageContent);
+
+  const token = cookies.get("user_token");
+
+  const { data } = useQuery({
+    queryKey: ["blogHistory", token],
+    queryFn: () => getBlogHistory(token),
+    enabled: !!token,
+  });
+
+  const [localPageContent, setLocalPageContent] = useState(() => data || []);
 
   useEffect(() => {
-    setLocalPageContent(pageContent);
-  }, [pageContent]);
+    if (data?.length) {
+      setLocalPageContent(data);
+    }
+  }, [data]);
 
-  const handleConfirm = () => {
-    toast.success(t("post.successfully"));
+  const importMutate = useMutation({
+    mutationFn: ({ post_id, token }: { post_id: string; token: string }) =>
+      importKnowledge(post_id, token),
+    onSuccess: () => {
+      toast.success(t("update.successfully"));
+      window.location.reload();
+    },
+    onError: () => {
+      toast.error(t("update.failed"));
+    },
+  });
+
+  const handleImport = () => {
+    const postId = data?.[currentPage - 1]?.id;
+    if (!postId || !token) return;
+    importMutate.mutate({ post_id: String(postId), token });
     onConfirm();
   };
 
   const showModal = () => {
     setIsModalVisible(true);
-    setEditedContent(localPageContent[currentPage - 1] || "");
+    const currentContent = data?.[currentPage - 1]?.content || "";
+    setEditedContent(currentContent);
+    setSelectedPostId(data?.[currentPage - 1]?.id);
   };
 
   const handleModalOk = () => {
-    const newPageContent = [...localPageContent];
-    newPageContent[currentPage - 1] = editedContent;
-    setLocalPageContent(newPageContent);
+    const updated = [...localPageContent];
+    if (updated[currentPage - 1]) {
+      updated[currentPage - 1].content = editedContent;
+      setLocalPageContent(updated);
+    }
     setIsModalVisible(false);
   };
 
   const handleModalCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const onEdit = () => {
-    toast.success("OK");
     setIsModalVisible(false);
   };
 
@@ -93,22 +125,22 @@ const GeneratedPost: React.FC<GeneratedPostProps> = ({
         </div>
         <div className="flex gap-2 text-xs">
           <span>
-            {pageContent.length} {t("post")}
+            {data?.length} {t("post")}
           </span>
-          {isChecked && pageContent.length > 0 && (
+          {isChecked && data?.length > 0 && (
             <button
               className="border border-gray-400 px-2 flex gap-2 hover"
               onClick={handleExport}>
               <ExportOutlined />
               <span className="font-semibold text-xs">
-                {t("export")} {pageContent.length}
+                {t("export")} {data?.length}
               </span>
             </button>
           )}
         </div>
       </div>
 
-      {pageContent.length > 0 ? (
+      {data?.length > 0 ? (
         <div className="border-2 border-gray-200 p-3 rounded-lg mt-2">
           <div className="flex justify-between">
             <div className="flex gap-1.5 items-center">
@@ -127,7 +159,10 @@ const GeneratedPost: React.FC<GeneratedPostProps> = ({
           </div>
           <div className="flex flex-col w-full items-center">
             <div className="mt-4 line-clamp-4">
-              <p>{localPageContent[currentPage - 1]}</p>{" "}
+              <p>
+                {localPageContent[currentPage - 1]?.content ||
+                  "Không có nội dung"}
+              </p>
             </div>
             <div className="mt-4">
               <Pagination
@@ -148,7 +183,7 @@ const GeneratedPost: React.FC<GeneratedPostProps> = ({
               <EditOutlined />
             </button>
             <button
-              onClick={handleConfirm}
+              onClick={handleImport}
               className=" hover:cursor-pointer hover:bg-blue-200 p-1 rounded-md">
               <CheckOutlined />
             </button>
@@ -160,14 +195,12 @@ const GeneratedPost: React.FC<GeneratedPostProps> = ({
         </div>
       )}
 
-      <Modal // Modal component
+      <Modal
         title={t("edit.post")}
         open={isModalVisible}
         onOk={handleModalOk}
         footer={
-          <button
-            onClick={onEdit}
-            className="w-full bg-black text-white rounded-lg p-3 hover">
+          <button className="w-full bg-black text-white rounded-lg p-3 hover">
             {t("save.changes")}
           </button>
         }
@@ -175,7 +208,7 @@ const GeneratedPost: React.FC<GeneratedPostProps> = ({
         <Input.TextArea
           value={editedContent}
           onChange={(e) => setEditedContent(e.target.value)}
-          rows={7}
+          rows={20}
           style={{ resize: "none" }}
         />
       </Modal>

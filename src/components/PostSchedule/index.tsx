@@ -27,7 +27,9 @@ const PostSchedule = () => {
   }, [selectedPageId]);
 
   const accessToken = getAccessToken();
-  const isLoggedIn = !!accessToken;
+  const linkedinAccessToken = localStorage.getItem("linkedin_access_token");
+
+  const isLoggedIn = !!accessToken || !!linkedinAccessToken;
 
   const { data, isLoading } = useQuery({
     queryKey: ["fb-pages", accessToken],
@@ -37,7 +39,7 @@ const PostSchedule = () => {
   });
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!accessToken && !linkedinAccessToken) {
       setShowModal(true);
     }
   }, [accessToken]);

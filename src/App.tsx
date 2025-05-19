@@ -11,6 +11,7 @@ import PostSchedulePage from "./pages/PostSchedulePage";
 import MainLayout from "./components/Layout/MainLayout";
 import MediaManagementPage from "./pages/MediaManagementPage";
 import AICanvasPage from "./pages/AICanvasPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const mainRoutes = [
   {
@@ -47,6 +48,11 @@ const mainRoutes = [
     path: "/AI-canvas",
     element: <AICanvasPage />,
     key: "AI-canvas",
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+    key: "profile",
   },
 ];
 

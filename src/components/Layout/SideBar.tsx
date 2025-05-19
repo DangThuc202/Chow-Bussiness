@@ -4,23 +4,24 @@ import { Menu } from "antd";
 import { useTranslation } from "react-i18next";
 import {
   LinkOutlined,
+  LoginOutlined,
   OpenAIOutlined,
+  ProfileOutlined,
   RobotOutlined,
   SettingOutlined,
   UsergroupAddOutlined,
   VerticalRightOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { logo, vi, en } from "@/assets/SideBar";
-import { useLanguage } from "@/contexts/LanguagesContext";
+import { logo } from "@/assets/SideBar";
 import TooltipComponent from "../Common/Tooltip/Tooltip";
+import LoginForm from "../LoginForm";
 
 const SideBar = () => {
   const { t } = useTranslation();
-  const { selectedLanguage, changeLanguage } = useLanguage();
 
   const [isCollapsedSidebar, setIsCollapsedSidebar] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -147,6 +148,26 @@ const SideBar = () => {
       ),
       label: <Link to="/setting">{t("setting")}</Link>,
     },
+    {
+      key: "item6",
+      icon: (
+        <div className="flex gap-1.5 relative group">
+          <span
+            className={`text-white z-10 ${
+              isCollapsedSidebar && !isMobile
+                ? "hidden"
+                : "opacity-0 group-hover:opacity-100"
+            }`}>
+            <TooltipComponent
+              title={t("a.trustworthy.profile")}
+              content={t("a.trustworthy.profile.content")}
+            />
+          </span>
+          <ProfileOutlined style={{ fontSize: "24px" }} />
+        </div>
+      ),
+      label: <Link to="/profile">{t("profile")}</Link>,
+    },
   ];
 
   useEffect(() => {
@@ -172,6 +193,10 @@ const SideBar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobile, isMobileOpen]);
+
+  const handleShowLoginForm = () => {
+    setShowLoginForm(true);
+  };
 
   return (
     <>
@@ -218,13 +243,15 @@ const SideBar = () => {
 
         {/* Logo */}
         {!isCollapsedSidebar && (
-          <div className="w-full h-1/8 flex justify-center items-end">
-            <img
-              className="w-[80%] h-auto object-cover"
-              src={logo}
-              alt="Logo"
-            />
-          </div>
+          <>
+            <div className="w-full h-1/8 flex justify-center items-end">
+              <img
+                className="w-[80%] h-auto object-cover"
+                src={logo}
+                alt="Logo"
+              />
+            </div>
+          </>
         )}
 
         {/* Menu */}
@@ -246,49 +273,16 @@ const SideBar = () => {
           }}
         />
 
-        {/* Ngôn ngữ */}
         <div className="absolute w-full text-center px-3 bottom-5">
-          <div className="relative">
-            <button
-              className="py-3 px-6 text-white w-full font-medium hover:cursor-pointer hover:bg-white/20 text-center"
-              onClick={() => setShowDropdown(!showDropdown)}>
-              <span className="flex justify-center items-center gap-2">
-                <img
-                  src={selectedLanguage === "en" ? en : vi}
-                  className="size-5"
-                  alt="Lang"
-                />
-                {!isCollapsedSidebar && (
-                  <span>
-                    {selectedLanguage === "en" ? "English" : "Tiếng Việt"}
-                  </span>
-                )}
-              </span>
-            </button>
+          <button
+            onClick={handleShowLoginForm}
+            className="py-3 px-6 text-white w-full font-bold hover:cursor-pointer hover:bg-white/20 flex gap-3 justify-center">
+            <LoginOutlined className="text-xl" /> <span>{t("signin")}</span>
+          </button>
 
-            {showDropdown && (
-              <div className="absolute bottom-full mb-2 left-0 w-full bg-white rounded-md shadow-lg z-50">
-                <div
-                  className="py-2 px-4 hover:bg-gray-100 cursor-pointer text-left flex items-center gap-2"
-                  onClick={() => {
-                    changeLanguage("en");
-                    setShowDropdown(false);
-                  }}>
-                  <img src={en} className="size-5" />
-                  English
-                </div>
-                <div
-                  className="py-2 px-4 hover:bg-gray-100 cursor-pointer text-left flex items-center gap-2"
-                  onClick={() => {
-                    changeLanguage("vi");
-                    setShowDropdown(false);
-                  }}>
-                  <img src={vi} className="size-5" />
-                  Tiếng Việt
-                </div>
-              </div>
-            )}
-          </div>
+          {showLoginForm && (
+            <LoginForm open={true} onClose={() => setShowLoginForm(false)} />
+          )}
         </div>
       </div>
     </>
